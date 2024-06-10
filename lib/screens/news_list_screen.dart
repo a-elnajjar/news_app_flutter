@@ -11,12 +11,15 @@ class NewsListScreen extends StatefulWidget {
 class _NewsListScreenState extends State<NewsListScreen> {
   final NewsService newsService = NewsService();
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<Article> _articles = [];
+  List<Article> _filteredArticles = [];
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
   String _selectedCountry = 'us'; // Default country
+  String _query = '';
 
   @override
   void initState() {
@@ -26,6 +29,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && _hasMore) {
         _fetchArticles();
       }
+    });
+
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _query = _searchController.text;
+      _filterArticles();
     });
   }
 
@@ -43,6 +55,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
           _hasMore = false;
         } else {
           _articles.addAll(fetchedArticles);
+          _filterArticles();
         }
       });
     } catch (e) {
@@ -51,6 +64,18 @@ class _NewsListScreenState extends State<NewsListScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  void _filterArticles() {
+    if (_query.isEmpty) {
+      _filteredArticles = _articles;
+    } else {
+      _filteredArticles = _articles
+          .where((article) =>
+              article.title.toLowerCase().contains(_query.toLowerCase()) ||
+              article.description.toLowerCase().contains(_query.toLowerCase()))
+          .toList();
     }
   }
 
@@ -67,6 +92,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -74,22 +100,44 @@ class _NewsListScreenState extends State<NewsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('News'),
+        title: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: 'Search...',
+            hintStyle: TextStyle(color: Colors.grey), // Set hint text color to grey
+            filled: true,
+            fillColor: Colors.white, // Set background color to white
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.blue), // Set border color to blue
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.grey), // Set border color when enabled to grey
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: BorderSide(color: Colors.blue), // Set border color when focused to blue
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0), // Set padding inside the text field
+          ),
+          style: TextStyle(color: Colors.black), // Set text color to black
+        ),
       ),
       body: Column(
         children: [
           _buildCountryChips(),
           Expanded(
-            child: _articles.isEmpty
+            child: _filteredArticles.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : ListView.builder(
                     controller: _scrollController,
-                    itemCount: _articles.length + 1,
+                    itemCount: _filteredArticles.length + 1,
                     itemBuilder: (context, index) {
-                      if (index == _articles.length) {
+                      if (index == _filteredArticles.length) {
                         return _hasMore ? Center(child: CircularProgressIndicator()) : Container();
                       }
-                      final article = _articles[index];
+                      final article = _filteredArticles[index];
                       return ArticleTile(article: article);
                     },
                   ),

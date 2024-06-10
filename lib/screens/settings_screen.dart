@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'about_screen.dart'; // Import the AboutScreen
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -58,7 +59,10 @@ class SettingsScreen extends StatelessWidget {
             title: Text('About'),
             subtitle: Text('App version, terms, and contact support'),
             onTap: () {
-              // Navigate to About screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutScreen()),
+              );
             },
           ),
         ],
