@@ -9,7 +9,7 @@
         "request": "launch",
         "type": "dart",
         "flutterMode": "debug",
-        "deviceId": "iphone15" // Replace with actual device ID
+        "deviceId": "BD9F1200-0B18-4037-A1EA-BDB121D85BCB " // Replace with actual device ID
       },
       {
         "name": "Flutter (Pixel 4)",

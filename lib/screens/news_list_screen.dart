@@ -11,11 +11,12 @@ class NewsListScreen extends StatefulWidget {
 class _NewsListScreenState extends State<NewsListScreen> {
   final NewsService newsService = NewsService();
   final ScrollController _scrollController = ScrollController();
-  
+
   List<Article> _articles = [];
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
+  String _selectedCountry = 'us'; // Default country
 
   @override
   void initState() {
@@ -33,9 +34,9 @@ class _NewsListScreenState extends State<NewsListScreen> {
     setState(() {
       _isLoading = true;
     });
-    
+
     try {
-      List<Article> fetchedArticles = await newsService.fetchTopHeadlines(page: _currentPage);
+      List<Article> fetchedArticles = await newsService.fetchTopHeadlines(country: _selectedCountry, page: _currentPage);
       setState(() {
         _currentPage++;
         if (fetchedArticles.isEmpty) {
@@ -53,6 +54,16 @@ class _NewsListScreenState extends State<NewsListScreen> {
     }
   }
 
+  void _changeCountry(String country) {
+    setState(() {
+      _selectedCountry = country;
+      _currentPage = 1;
+      _articles.clear();
+      _hasMore = true;
+    });
+    _fetchArticles();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -62,19 +73,52 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _articles.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              controller: _scrollController,
-              itemCount: _articles.length + 1,
-              itemBuilder: (context, index) {
-                if (index == _articles.length) {
-                  return _hasMore ? Center(child: CircularProgressIndicator()) : Container();
+      appBar: AppBar(
+        title: Text('News'),
+      ),
+      body: Column(
+        children: [
+          _buildCountryChips(),
+          Expanded(
+            child: _articles.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _articles.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == _articles.length) {
+                        return _hasMore ? Center(child: CircularProgressIndicator()) : Container();
+                      }
+                      final article = _articles[index];
+                      return ArticleTile(article: article);
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCountryChips() {
+    final countries = ['us', 'ca', 'gb', 'au', 'in'];
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: countries.map((country) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ChoiceChip(
+              label: Text(country.toUpperCase()),
+              selected: _selectedCountry == country,
+              onSelected: (selected) {
+                if (selected) {
+                  _changeCountry(country);
                 }
-                final article = _articles[index];
-                return ArticleTile(article: article);
               },
             ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
