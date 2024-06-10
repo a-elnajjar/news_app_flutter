@@ -1,22 +1,26 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
+  "version": "0.2.0",
+  "configurations": [
       {
-        "name": "Flutter (iPhone 15)",
-        "request": "launch",
-        "type": "dart",
-        "flutterMode": "debug",
-        "deviceId": "BD9F1200-0B18-4037-A1EA-BDB121D85BCB " // Replace with actual device ID
+          "name": "Flutter (iPhone 15)",
+          "request": "launch",
+          "type": "dart",
+          "flutterMode": "debug",
+          "deviceId": "BD9F1200-0B18-4037-A1EA-BDB121D85BCB" // iPhone 15 simulator device ID
       },
       {
-        "name": "Flutter (Pixel 4)",
-        "request": "launch",
-        "type": "dart",
-        "flutterMode": "debug",
-        "deviceId": "emulator-5554" // Replace with actual device ID
+          "name": "Flutter (macOS)",
+          "request": "launch",
+          "type": "dart",
+          "flutterMode": "debug",
+          "deviceId": "macos" // macOS desktop device ID
+      },
+      {
+          "name": "Flutter (Chrome)",
+          "request": "launch",
+          "type": "dart",
+          "flutterMode": "debug",
+          "deviceId": "chrome" // Chrome web browser device ID
       }
-    ]
+  ]
 }
