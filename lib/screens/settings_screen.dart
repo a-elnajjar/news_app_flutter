@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'about_screen.dart'; // Import the AboutScreen
+import 'about_screen.dart'; 
 
 class SettingsScreen extends StatelessWidget {
   @override

@@ -10,11 +10,34 @@ class ArticleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: article.urlToImage != null
-          ? Image.network(article.urlToImage!, width: 100, fit: BoxFit.cover)
-          : Container(width: 100, color: Colors.grey), // Placeholder for null image
-      title: Text(article.title),
-      subtitle: Text(article.description),
+      leading: Container(
+        width: 100,
+        height: 100,
+        color: Colors.grey, // Placeholder color
+        child: article.urlToImage != null
+            ? Image.network(
+                article.urlToImage!,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                  return Icon(Icons.broken_image, color: Colors.white); // Placeholder icon for error
+                },
+              )
+            : Icon(Icons.image, color: Colors.white), // Placeholder icon
+      ),
+      title: Text(
+        article.title,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        article.description,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+      ),
       onTap: () {
         Navigator.push(
           context,

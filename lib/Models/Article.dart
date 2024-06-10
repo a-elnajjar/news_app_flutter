@@ -1,15 +1,15 @@
 class Article {
   final String title;
   final String description;
-  final String? urlToImage;
+  final String urlToImage;
 
-  Article({required this.title, required this.description, this.urlToImage});
+  Article({required this.title, required this.description, required this.urlToImage});
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
-      title: json['title'] ?? 'No title available',
-      description: json['description'] ?? 'No description available',
-      urlToImage: json['urlToImage'] as String?, // Allows null value
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      urlToImage: json['urlToImage'] ?? json['image'] ?? '',
     );
   }
 }

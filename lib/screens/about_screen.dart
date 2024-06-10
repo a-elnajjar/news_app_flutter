@@ -68,7 +68,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 // Handle contact support, e.g., open an email app or navigate to a support screen
               },
               child: Text(
-                'support@example.com', // Replace with your support email
+                'support@example.com', 
                 style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
               ),
             ),

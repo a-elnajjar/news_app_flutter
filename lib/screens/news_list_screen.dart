@@ -18,7 +18,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
-  String _selectedCountry = 'us'; // Default country
+  String _selectedCountry = 'us'; 
   String _query = '';
 
   @override
@@ -121,7 +121,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0), // Set padding inside the text field
           ),
-          style: TextStyle(color: Colors.black), // Set text color to black
+          style: TextStyle(color: Colors.black), 
         ),
       ),
       body: Column(
